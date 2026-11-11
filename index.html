@@ -1,0 +1,608 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вселенная — Космическое путешествие</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --cyan:#54eaff;
+  --blue:#657cff;
+  --purple:#a56bff;
+  --white:#f3f6ff;
+  --muted:#aab5d3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden}
+body{
+ background:#030611;color:var(--white);
+ font-family:Montserrat,sans-serif;
+}
+#space{
+ position:fixed;inset:0;width:100%;height:100%;
+ z-index:-3;
+}
+body:before{
+ content:"";position:fixed;inset:0;z-index:-2;
+ background:
+ radial-gradient(ellipse at 15% 20%,#15205266,transparent 50%),
+ radial-gradient(ellipse at 85% 75%,#501b6d44,transparent 50%);
+ pointer-events:none;
+}
+.slide{
+ position:absolute;inset:0;
+ padding:85px 9% 95px;
+ display:flex;align-items:center;
+ opacity:0;visibility:hidden;
+ transform:scale(.94) translateY(20px);
+ transition:opacity .7s,transform .8s,visibility .8s;
+ overflow-y:auto;
+}
+.slide.active{
+ opacity:1;visibility:visible;
+ transform:scale(1) translateY(0);
+}
+.content{width:100%;max-width:1200px;margin:auto}
+.kicker{
+ color:var(--cyan);font-family:Orbitron;
+ font-size:12px;letter-spacing:5px;
+ margin-bottom:20px;
+}
+h1,h2,h3{font-family:Orbitron,sans-serif}
+h1{
+ font-size:clamp(38px,7vw,88px);
+ line-height:1.12;
+ letter-spacing:-3px;
+}
+h2{
+ font-size:clamp(30px,4.5vw,55px);
+ margin-bottom:25px;
+}
+.gradient{
+ background:linear-gradient(100deg,#fff,#65dfff,#a77aff);
+ -webkit-background-clip:text;background-clip:text;
+ color:transparent;
+}
+.description{
+ font-size:clamp(14px,1.5vw,18px);
+ line-height:1.9;color:var(--muted);
+ max-width:680px;margin-top:22px;
+}
+.grid{
+ display:grid;grid-template-columns:1fr 1fr;
+ gap:45px;align-items:center;
+}
+.panel{
+ padding:27px;border:1px solid #ffffff1b;
+ background:linear-gradient(140deg,#ffffff0b,#ffffff03);
+ border-radius:20px;
+ backdrop-filter:blur(12px);
+ box-shadow:0 15px 60px #0005;
+}
+.panel h3{font-size:16px;color:var(--cyan);margin-bottom:15px}
+.panel p{font-size:14px;color:var(--muted);line-height:1.8}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+.fact{
+ border:1px solid #ffffff17;
+ padding:15px;border-radius:12px;background:#ffffff08;
+}
+.fact strong{display:block;color:var(--cyan);font-family:Orbitron;font-size:19px;margin-bottom:7px}
+.fact span{font-size:11px;color:var(--muted)}
+.planet-scene{
+ height:390px;display:flex;align-items:center;justify-content:center;
+ position:relative;
+}
+.planet{
+ width:220px;height:220px;border-radius:50%;
+ position:relative;
+ box-shadow:inset -35px -20px 55px #000b,0 0 65px var(--glow);
+ background:var(--planet);
+ animation:float 5s ease-in-out infinite;
+}
+.planet:before{
+ content:"";position:absolute;inset:0;border-radius:50%;
+ background:linear-gradient(110deg,#ffffff44,transparent 40%,#0005);
+}
+.planet:after{
+ content:"";position:absolute;inset:10px;border-radius:50%;
+ border:1px solid #ffffff12;
+}
+@keyframes float{
+ 0%,100%{transform:translateY(-9px) rotate(-5deg)}
+ 50%{transform:translateY(9px) rotate(5deg)}
+}
+.orbit{
+ position:absolute;width:330px;height:330px;
+ border:1px solid #7b9dff33;border-radius:50%;
+ transform:rotateX(68deg);
+ animation:orbit 12s linear infinite;
+}
+@keyframes orbit{to{transform:rotateX(68deg) rotateZ(360deg)}}
+.ring{
+ position:absolute;width:340px;height:90px;
+ border:19px solid #d5b47a99;border-radius:50%;
+ transform:rotate(-22deg);
+ box-shadow:0 0 25px #d5b47a55;
+}
+.sun{
+ background:radial-gradient(circle at 35% 35%,#fff9bd,#ffbc39 38%,#ff5a18 70%,#a51d18);
+ --glow:#ff8b25;
+}
+.mercury{background:radial-gradient(circle at 35% 30%,#c9c1ae,#817d78 50%,#34343b);--glow:#aaa}
+.venus{background:radial-gradient(circle at 35% 30%,#fff0ae,#e4a34e 50%,#87432d);--glow:#e5a34e}
+.earth{background:radial-gradient(circle at 30% 30%,#8eefff,#1674ce 45%,#09265f);--glow:#239cff}
+.mars{background:radial-gradient(circle at 35% 30%,#ffb078,#c94d32 50%,#5d1e1a);--glow:#ff633a}
+.jupiter{background:repeating-linear-gradient(175deg,#d9bd98 0 13px,#9f694c 15px 25px,#ead7b7 28px 38px);--glow:#d1a478}
+.saturn{background:repeating-linear-gradient(170deg,#eddaa8 0 15px,#b68b56 18px 26px);--glow:#d6b078}
+.uranus{background:radial-gradient(circle at 35% 30%,#c8ffff,#63d9dc 50%,#247b9b);--glow:#6de9f5}
+.neptune{background:radial-gradient(circle at 35% 30%,#79c7ff,#2454d7 55%,#111c73);--glow:#386dff}
+.blackhole{
+ width:220px;height:220px;border-radius:50%;
+ background:radial-gradient(circle,#000 35%,#08000f 45%,#fa8c37 48%,#a344ff 54%,transparent 68%);
+ box-shadow:0 0 60px #ad4dff;
+ animation:bh 5s linear infinite;
+}
+@keyframes bh{to{transform:rotate(360deg)}}
+.pulsar{
+ width:100px;height:100px;border-radius:50%;
+ background:radial-gradient(circle,#fff,#7ddaff 35%,#2641a5 70%);
+ box-shadow:0 0 60px #65caff;
+ position:relative;
+}
+.pulsar:before,.pulsar:after{
+ content:"";position:absolute;left:50%;top:50%;
+ width:5px;height:340px;background:linear-gradient(transparent,#b5f5ff,transparent);
+ transform:translate(-50%,-50%);
+ filter:drop-shadow(0 0 12px cyan);
+}
+.pulsar:after{transform:translate(-50%,-50%) rotate(90deg)}
+.meteor{
+ position:absolute;width:150px;height:3px;
+ background:linear-gradient(90deg,white,cyan,transparent);
+ transform:rotate(-35deg);
+ animation:shoot 3s infinite;
+ filter:drop-shadow(0 0 7px cyan);
+}
+@keyframes shoot{
+ 0%{transform:translate(180px,-100px) rotate(-35deg);opacity:0}
+ 15%{opacity:1}
+ 100%{transform:translate(-350px,260px) rotate(-35deg);opacity:0}
+}
+.timeline{
+ display:flex;gap:8px;margin-top:20px;flex-wrap:wrap
+}
+.dot{
+ width:7px;height:7px;border-radius:50%;
+ background:#53607e;transition:.3s;
+}
+.dot.active{background:var(--cyan);box-shadow:0 0 12px var(--cyan);width:25px;border-radius:8px}
+.controls{
+ position:fixed;bottom:22px;left:0;right:0;
+ display:flex;justify-content:center;align-items:center;gap:20px;
+ z-index:20;
+}
+.btn{
+ border:1px solid #6ceaff66;color:white;
+ background:#101b34;padding:12px 23px;border-radius:30px;
+ cursor:pointer;font-family:Orbitron;font-size:11px;
+ transition:.3s;
+}
+.btn:hover{background:#23466a;box-shadow:0 0 22px #54eaff66;transform:translateY(-3px)}
+.counter{font-family:Orbitron;color:var(--cyan);font-size:12px}
+.progress{
+ position:fixed;top:0;left:0;height:3px;
+ background:linear-gradient(90deg,var(--cyan),var(--purple));
+ width:0%;z-index:30;box-shadow:0 0 12px var(--cyan);
+ transition:.5s;
+}
+.corner{
+ position:fixed;top:24px;left:35px;
+ font-family:Orbitron;font-size:11px;letter-spacing:3px;color:#a9b8d6;
+ z-index:20;
+}
+.hint{position:fixed;right:30px;top:24px;color:#7685a7;font-size:10px;z-index:20}
+ul{list-style:none;margin-top:15px}
+li{
+ color:var(--muted);font-size:14px;line-height:1.7;
+ margin:10px 0;padding-left:20px;position:relative;
+}
+li:before{content:"✦";position:absolute;left:0;color:var(--cyan)}
+.tag{
+ display:inline-block;padding:8px 12px;
+ border:1px solid #54eaff55;border-radius:30px;
+ color:var(--cyan);font-size:10px;margin:5px 4px 0 0;
+}
+@media(max-width:700px){
+ .slide{padding:80px 7% 90px}
+ .grid{grid-template-columns:1fr;gap:10px}
+ .planet-scene{height:250px;grid-row:1}
+ .planet{width:145px;height:145px}
+ .orbit{width:220px;height:220px}
+ .ring{width:225px;height:60px;border-width:12px}
+ .panel{padding:18px}
+ .description{font-size:13px}
+ .facts{gap:7px}
+ .corner{left:15px;top:13px;font-size:9px}
+ .hint{right:15px;top:13px}
+ .controls{bottom:12px;gap:10px}
+ .btn{padding:10px 14px;font-size:9px}
+ .counter{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<canvas id="space"></canvas>
+<div class="progress" id="progress"></div>
+<div class="corner">UNIVERSE / EXPLORATION</div>
+<div class="hint">← → NAVIGATION</div>
+
+<!-- 1 -->
+<section class="slide active">
+<div class="content">
+<div class="kicker">Космическое путешествие • 2026</div>
+<h1>ТАЙНЫ<br><span class="gradient">ВСЕЛЕННОЙ</span></h1>
+<p class="description">От раскалённого Солнца до загадочных чёрных дыр. Познакомимся с удивительными объектами космоса и исследуем восемь планет нашей Солнечной системы.</p>
+<div class="timeline"><span class="tag">8 ПЛАНЕТ</span><span class="tag">СОЛНЦЕ</span><span class="tag">ЧЁРНЫЕ ДЫРЫ</span><span class="tag">ПУЛЬСАРЫ</span></div>
+</div>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+<div class="content">
+<div class="kicker">01 / НАШ КОСМИЧЕСКИЙ ДОМ</div>
+<h2>Солнечная <span class="gradient">система</span></h2>
+<div class="grid">
+<div>
+<p class="description">Солнечная система — это Солнце и все небесные тела, которые движутся вокруг него под действием гравитации.</p>
+<ul>
+<li>В центре системы находится Солнце.</li>
+<li>Вокруг него обращаются восемь планет.</li>
+<li>Также существуют карликовые планеты, астероиды и кометы.</li>
+<li>Возраст системы — около 4,6 миллиарда лет.</li>
+</ul>
+</div>
+<div class="panel">
+<h3>ПОРЯДОК ПЛАНЕТ</h3>
+<p>☀️ Солнце → Меркурий → Венера → Земля → Марс → Юпитер → Сатурн → Уран → Нептун</p>
+<div class="facts"><div class="fact"><strong>8</strong><span>Планет</span></div><div class="fact"><strong>4,6 млрд</strong><span>Лет возраст</span></div></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+<div class="content">
+<div class="kicker">02 / ЗВЕЗДА НАШЕЙ СИСТЕМЫ</div>
+<div class="grid">
+<div>
+<h2><span class="gradient">Солнце</span></h2>
+<p class="description">Солнце — огромная звезда, состоящая преимущественно из водорода и гелия. Оно является главным источником света и тепла для Земли.</p>
+<ul>
+<li>Температура поверхности — около 5500 °C.</li>
+<li>В ядре происходят термоядерные реакции.</li>
+<li>Свет достигает Земли примерно за 8 минут 20 секунд.</li>
+<li>Солнце удерживает планеты своей гравитацией.</li>
+</ul>
+</div>
+<div class="planet-scene"><div class="planet sun"></div><div class="orbit"></div></div>
+</div>
+</div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+<div class="content">
+<div class="kicker">03 / ПЕРВАЯ ПЛАНЕТА</div>
+<div class="grid">
+<div>
+<h2>Меркурий</h2>
+<p class="description">Меркурий — самая маленькая планета Солнечной системы и ближайшая к Солнцу. На его поверхности много кратеров.</p>
+<ul>
+<li>Не имеет спутников и плотной атмосферы.</li>
+<li>Днём поверхность сильно нагревается.</li>
+<li>Ночью температура резко падает.</li>
+<li>Один оборот вокруг Солнца занимает 88 земных суток.</li>
+</ul>
+<div class="facts"><div class="fact"><strong>88</strong><span>Дней — год</span></div><div class="fact"><strong>4 879 км</strong><span>Диаметр</span></div></div>
+</div>
+<div class="planet-scene"><div class="planet mercury"></div><div class="orbit"></div></div>
+</div>
+</div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+<div class="content">
+<div class="kicker">04 / САМАЯ ЖАРКАЯ ПЛАНЕТА</div>
+<div class="grid">
+<div>
+<h2>Венера</h2>
+<p class="description">Венера похожа на Землю по размеру, но условия на ней совершенно другие. Её плотная атмосфера состоит главным образом из углекислого газа.</p>
+<ul>
+<li>Самая горячая планета системы.</li>
+<li>Температура поверхности около 465 °C.</li>
+<li>Облака содержат капли серной кислоты.</li>
+<li>Венера вращается вокруг оси в обратном направлении относительно большинства планет.</li>
+</ul>
+</div>
+<div class="planet-scene"><div class="planet venus"></div><div class="orbit"></div></div>
+</div>
+</div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+<div class="content">
+<div class="kicker">05 / НАШ ДОМ</div>
+<div class="grid">
+<div>
+<h2><span class="gradient">Земля</span></h2>
+<p class="description">Земля — наша родная планета. Пока это единственный известный мир, на котором существует жизнь.</p>
+<ul>
+<li>Около 71% поверхности покрыто водой.</li>
+<li>Имеет один естественный спутник — Луну.</li>
+<li>Атмосфера содержит кислород и азот.</li>
+<li>Магнитное поле помогает защищать планету от солнечного ветра.</li>
+</ul>
+<div class="facts"><div class="fact"><strong>365,25</strong><span>Дней в году</span></div><div class="fact"><strong>1</strong><span>Естественный спутник</span></div></div>
+</div>
+<div class="planet-scene"><div class="planet earth"></div><div class="orbit"></div></div>
+</div>
+</div>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+<div class="content">
+<div class="kicker">06 / КРАСНАЯ ПЛАНЕТА</div>
+<div class="grid">
+<div>
+<h2>Марс</h2>
+<p class="description">Марс называют Красной планетой из-за оксида железа в его грунте. Учёные исследуют его, чтобы понять, могла ли там существовать жизнь.</p>
+<ul>
+<li>Имеет два спутника — Фобос и Деймос.</li>
+<li>На Марсе находится гора Олимп — огромный вулкан.</li>
+<li>Есть полярные ледяные шапки.</li>
+<li>Марсоходы изучают поверхность планеты.</li>
+</ul>
+</div>
+<div class="planet-scene"><div class="planet mars"></div><div class="orbit"></div></div>
+</div>
+</div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+<div class="content">
+<div class="kicker">07 / ГАЗОВЫЙ ГИГАНТ</div>
+<div class="grid">
+<div>
+<h2>Юпитер</h2>
+<p class="description">Юпитер — самая большая планета Солнечной системы. Он состоит главным образом из водорода и гелия.</p>
+<ul>
+<li>Имеет множество известных спутников.</li>
+<li>Большое красное пятно — гигантский атмосферный шторм.</li>
+<li>Обладает мощным магнитным полем.</li>
+<li>Его масса более чем в 300 раз превышает массу Земли.</li>
+</ul>
+</div>
+<div class="planet-scene"><div class="planet jupiter"></div><div class="orbit"></div></div>
+</div>
+</div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+<div class="content">
+<div class="kicker">08 / ПЛАНЕТА С КОЛЬЦАМИ</div>
+<div class="grid">
+<div>
+<h2>Сатурн</h2>
+<p class="description">Сатурн знаменит своей впечатляющей системой колец. Они состоят преимущественно из частиц льда, пыли и камней.</p>
+<ul>
+<li>Вторая по величине планета системы.</li>
+<li>Имеет множество спутников.</li>
+<li>Кольца простираются на сотни тысяч километров.</li>
+<li>Титан — крупнейший спутник Сатурна.</li>
+</ul>
+</div>
+<div class="planet-scene">
+<div class="ring"></div><div class="planet saturn"></div>
+<div class="orbit"></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+<div class="content">
+<div class="kicker">09 / ЛЕДЯНОЙ ГИГАНТ</div>
+<div class="grid">
+<div>
+<h2>Уран</h2>
+<p class="description">Уран — необычная голубовато-зелёная планета. Его ось вращения сильно наклонена, поэтому он словно катится по своей орбите.</p>
+<ul>
+<li>Состоит из атмосферы и глубоких слоёв льдов и газов.</li>
+<li>Имеет систему колец.</li>
+<li>Очень холодная планета.</li>
+<li>Полный оборот вокруг Солнца занимает 84 земных года.</li>
+</ul>
+</div>
+<div class="planet-scene"><div class="planet uranus"></div><div class="orbit"></div></div>
+</div>
+</div>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+<div class="content">
+<div class="kicker">10 / ДАЛЬНЯЯ ПЛАНЕТА</div>
+<div class="grid">
+<div>
+<h2><span class="gradient">Нептун</span></h2>
+<p class="description">Нептун — самая дальняя от Солнца планета среди восьми. Это холодный ледяной гигант насыщенного синего цвета.</p>
+<ul>
+<li>Обладает очень сильными ветрами.</li>
+<li>Имеет спутник Тритон.</li>
+<li>Один год длится около 165 земных лет.</li>
+<li>Был открыт в 1846 году.</li>
+</ul>
+</div>
+<div class="planet-scene"><div class="planet neptune"></div><div class="orbit"></div></div>
+</div>
+</div>
+</section>
+
+<!-- 12 -->
+<section class="slide">
+<div class="content">
+<div class="kicker">11 / КОСМИЧЕСКИЕ ГОСТИ</div>
+<div class="grid">
+<div>
+<h2>Метеориты <span class="gradient">и кометы</span></h2>
+<p class="description">Космос наполнен небольшими небесными телами. Некоторые из них попадают в атмосферу Земли или достигают её поверхности.</p>
+<ul>
+<li>Астероид — небольшое каменное или металлическое тело, обращающееся вокруг Солнца.</li>
+<li>Метеороид — небольшой объект в космосе.</li>
+<li>Метеор — световое явление при прохождении объекта через атмосферу.</li>
+<li>Метеорит — фрагмент, который достиг поверхности планеты.</li>
+<li>Комета — ледяное тело, которое при приближении к Солнцу может образовать хвост.</li>
+</ul>
+</div>
+<div class="planet-scene">
+<div class="meteor"></div>
+<div style="font-size:100px;filter:drop-shadow(0 0 25px #a9aaff)">☄️</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 13 -->
+<section class="slide">
+<div class="content">
+<div class="kicker">12 / САМЫЕ ЗАГАДОЧНЫЕ ОБЪЕКТЫ</div>
+<div class="grid">
+<div>
+<h2>Чёрные <span class="gradient">дыры</span></h2>
+<p class="description">Чёрная дыра — область пространства-времени, где гравитация настолько сильна, что даже свет не может покинуть её пределы.</p>
+<ul>
+<li>Может возникнуть после коллапса массивной звезды.</li>
+<li>Граница, за которую нельзя вернуться, называется горизонтом событий.</li>
+<li>Сами чёрные дыры не излучают свет, но их окружение может ярко светиться.</li>
+<li>Учёные обнаруживают их по влиянию на окружающую материю.</li>
+</ul>
+</div>
+<div class="planet-scene"><div class="blackhole"></div></div>
+</div>
+</div>
+</section>
+
+<!-- 14 -->
+<section class="slide">
+<div class="content">
+<div class="kicker">13 / КОСМИЧЕСКИЕ МАЯКИ</div>
+<div class="grid">
+<div>
+<h2><span class="gradient">Пульсары</span></h2>
+<p class="description">Пульсар — быстро вращающаяся нейтронная звезда, которая испускает узкие пучки электромагнитного излучения.</p>
+<ul>
+<li>Образуется из остатков массивной звезды после взрыва сверхновой.</li>
+<li>Обладает невероятно высокой плотностью.</li>
+<li>Излучение может регистрироваться как регулярные импульсы.</li>
+<li>Некоторые пульсары вращаются сотни раз в секунду.</li>
+</ul>
+</div>
+<div class="planet-scene"><div class="pulsar"></div></div>
+</div>
+</div>
+</section>
+
+<!-- 15 -->
+<section class="slide">
+<div class="content" style="text-align:center">
+<div class="kicker">14 / КОНЕЦ ПУТЕШЕСТВИЯ</div>
+<h1>ВСЕЛЕННАЯ<br><span class="gradient">БЕЗ ГРАНИЦ</span></h1>
+<p class="description" style="margin:25px auto">
+Мы познакомились с Солнцем, восемью планетами и удивительными космическими объектами. Но Вселенная намного больше, чем мы можем представить. Каждый новый научный вопрос открывает путь к новым открытиям.
+</p>
+<div class="facts" style="max-width:650px;margin:30px auto;text-align:center">
+<div class="fact"><strong>8</strong><span>Планет</span></div>
+<div class="fact"><strong>∞</strong><span>Тайн Вселенной</span></div>
+</div>
+<h3 style="color:var(--cyan);margin-top:25px">СПАСИБО ЗА ВНИМАНИЕ!</h3>
+</div>
+</section>
+
+<div class="controls">
+<button class="btn" onclick="prev()">← НАЗАД</button>
+<span class="counter" id="counter">01 / 15</span>
+<button class="btn" onclick="next()">ВПЕРЁД →</button>
+</div>
+
+<script>
+// Звёздное небо
+const canvas=document.getElementById('space');
+const ctx=canvas.getContext('2d');
+let stars=[];
+function resize(){
+ canvas.width=innerWidth;canvas.height=innerHeight;
+ stars=Array.from({length:Math.min(350,Math.floor(innerWidth*innerHeight/3000))},()=>({
+ x:Math.random()*canvas.width,
+ y:Math.random()*canvas.height,
+ r:Math.random()*1.6+.2,
+ a:Math.random(),
+ speed:Math.random()*.012+.002
+ }));
+}
+function draw(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ stars.forEach(s=>{
+ s.a+=s.speed;
+ let alpha=.3+Math.abs(Math.sin(s.a))*.7;
+ ctx.fillStyle=`rgba(180,220,255,${alpha})`;
+ ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+ });
+ requestAnimationFrame(draw);
+}
+resize();draw();
+window.addEventListener('resize',resize);
+
+// Слайды
+const slides=[...document.querySelectorAll('.slide')];
+let current=0;
+function showSlide(n){
+ slides[current].classList.remove('active');
+ current=(n+slides.length)%slides.length;
+ slides[current].classList.add('active');
+ document.getElementById('counter').textContent=
+ String(current+1).padStart(2,'0')+' / '+slides.length;
+ document.getElementById('progress').style.width=
+ ((current+1)/slides.length*100)+'%';
+}
+function next(){showSlide(current+1)}
+function prev(){showSlide(current-1)}
+document.addEventListener('keydown',e=>{
+ if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next()}
+ if(e.key==='ArrowLeft'){prev()}
+ if(e.key==='Home'){showSlide(0)}
+ if(e.key==='End'){showSlide(slides.length-1)}
+});
+let touchX=0;
+document.addEventListener('touchstart',e=>touchX=e.changedTouches[0].screenX,{passive:true});
+document.addEventListener('touchend',e=>{
+ let diff=e.changedTouches[0].screenX-touchX;
+ if(Math.abs(diff)>65){diff<0?next():prev()}
+},{passive:true});
+showSlide(0);
+</script>
+</body>
+</html>
